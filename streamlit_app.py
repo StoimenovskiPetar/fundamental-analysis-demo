@@ -4,28 +4,31 @@ import streamlit as st
 import yfinance as yf
 from stock_analysis import get_stock_info, compare_stocks
 from valuation import calculate_dtf_valuation, get_valuation_points
+from financial_statements import display_financial_statements
 
 # Show the page title and description.
 st.set_page_config(page_title="Fundamental analysis", page_icon="&star;", layout="wide")
 st.title("&star; Fundamental analysis Platform")
 st.write(
     """
-    Test demo app for fundamental analysis
+    Test demo app for fundamental analysis. WIP (Work in progress)
     """
 )
 stock_info={}
+set_ticker=False
 
  # Sidebar for input
 with st.sidebar:
     st.header("Stock Selection")
-    ticker = st.text_input("Enter Stock Ticker:", value="AAPL").upper()
+    ticker = st.text_input("Enter Stock Ticker:", value="").upper()
+    set_ticker=True
 
     if st.button("Analyze Stock"):
         try:
             with st.spinner('Fetching stock data...'):
                 stock = yf.Ticker(ticker)
                 info = stock.info
-                print(info)
+                print("Stock info: " + info)
 
                 # Store analysis data for export
             stock_info = get_stock_info(stock)
@@ -39,6 +42,56 @@ with st.container():
     st.subheader("Basic Stock Information")
     info_df = pd.DataFrame(list(stock_info.items()), columns=["Metric", "Value"])
     st.table(info_df)
+
+    # Financial Statements Section
+    display_financial_statements(ticker)
+
+    if set_ticker is True:
+        
+        st.subheader("Current Valuation")
+
+        try:
+            dtf_value = calculate_dtf_valuation(stock)
+            current_price = info['currentPrice']
+            difference = ((dtf_value/current_price)-1)*100
+            st.metric("Fair Value (DTF)", f"${dtf_value:.2f}", f"{difference:.1f}% from current price")
+
+        # Add DTF Model Explanation
+            with st.expander("📊 Understanding DTF Valuation Model - Work In Progress"):
+                st.markdown("""
+                ### Discounted Cash Flow (DTF) Valuation Model
+
+                The DTF model calculates a stock's intrinsic value based on projected future cash flows. Here's how we calculate it:
+
+                #### 1. Initial Data Points
+                - Free Cash Flow (FCF): Current free cash flow
+                - Growth Rate: Company's earnings growth rate (default: 10% if unavailable)
+                - Discount Rate: 10% (industry standard for equity investments)
+
+                #### 2. Projection Steps
+                1. **5-Year Cash Flow Projection**
+                    - Year 1-5: FCF × (1 + growth_rate)^year
+
+                2. **Terminal Value Calculation**
+                    - Using 3% perpetual growth rate
+                    - Formula: Final Year FCF × (1 + 0.03) / (discount_rate - 0.03)
+
+                3. **Present Value Calculation**
+                    - Discounts all future cash flows to present value
+                    - Formula: CF / (1 + discount_rate)^year
+
+                4. **Per Share Value**
+                    - Total present value ÷ Shares outstanding
+
+                #### Key Assumptions
+                    - Stable growth rate
+                    - Consistent profit margins
+                    - No major market disruptions
+
+                 The model provides a theoretical fair value that can be compared with current market price.
+            """)
+        except Exception as e:
+            st.error(f"Could not calculate DTF valuation: {str(e)}")
 
 
 # Load the data from a CSV. We're caching this so it doesn't reload every time the app
