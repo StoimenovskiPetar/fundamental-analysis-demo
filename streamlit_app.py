@@ -35,7 +35,7 @@ with st.sidebar:
             st.error(f"Error analyzing stock: {str(e)}")
 
 # Main content area with two columns
-with st.container(border=True):  
+with st.container():  
     st.subheader("Basic Stock Information")
     info_df = pd.DataFrame(list(stock_info.items()), columns=["Metric", "Value"])
     st.table(info_df)
