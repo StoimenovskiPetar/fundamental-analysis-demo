@@ -5,51 +5,54 @@ import yfinance as yf
 from stock_analysis import get_stock_info, compare_stocks
 from valuation import calculate_dtf_valuation, get_valuation_points
 from financial_statements import display_financial_statements
+from visualization import create_metrics_pie_chart
 
 # Show the page title and description.
 st.set_page_config(page_title="Fundamental analysis", page_icon="&star;", layout="wide")
 st.title("&star; Fundamental analysis Platform")
 st.write(
     """
-    Test demo app for fundamental analysis. WIP (Work in progress)
+    Test demo app for fundamental analysis. WIP (Work in progress) \n
+    Used for educational purposes only
     """
 )
 stock_info={}
-set_ticker=False
+stock={}
+if 'set_ticker' not in st.session_state:
+    st.session_state.set_ticker = False
 
  # Sidebar for input
 with st.sidebar:
     st.header("Stock Selection")
     ticker = st.text_input("Enter Stock Ticker:", value="").upper()
-    set_ticker=True
 
     if st.button("Analyze Stock"):
+        st.session_state.set_ticker=True
         try:
             with st.spinner('Fetching stock data...'):
                 stock = yf.Ticker(ticker)
                 info = stock.info
-                print("Stock info: " + info)
-
+                print(info)
                 # Store analysis data for export
             stock_info = get_stock_info(stock)
             valuation_points = get_valuation_points(stock)
 
         except Exception as e:
+            print(e)
             st.error(f"Error analyzing stock: {str(e)}")
 
+if st.session_state.set_ticker:
 # Main content area with two columns
-with st.container():  
-    st.subheader("Basic Stock Information")
-    info_df = pd.DataFrame(list(stock_info.items()), columns=["Metric", "Value"])
-    st.table(info_df)
+    with st.container():  
+        st.subheader("Basic Stock Information")
+        info_df = pd.DataFrame(list(stock_info.items()), columns=["Metric", "Value"])
+        st.dataframe(info_df, use_container_width=True, hide_index=True)
 
-    # Financial Statements Section
-    display_financial_statements(ticker)
-
-    if set_ticker is True:
+        # Financial Statements Section
+        st.subheader("Financial Statements Analysis")
+        display_financial_statements(stock)
         
         st.subheader("Current Valuation")
-
         try:
             dtf_value = calculate_dtf_valuation(stock)
             current_price = info['currentPrice']
@@ -93,6 +96,19 @@ with st.container():
         except Exception as e:
             st.error(f"Could not calculate DTF valuation: {str(e)}")
 
+        # Visualization Section
+        st.subheader("Financial Metrics Visualization")
+        try:
+            metrics_fig = create_metrics_pie_chart(stock)
+            st.plotly_chart(metrics_fig, use_container_width=True)
+        except Exception as e:
+            st.error(f"Could not create visualization: {str(e)}")
+else:
+    with st.container():
+        st.subheader("Basic Stock Information")
+        st.subheader("Financial Statements Analysis")
+        st.subheader("Current Valuation")
+        
 
 # Load the data from a CSV. We're caching this so it doesn't reload every time the app
 # reruns (e.g. if the user interacts with the widgets).

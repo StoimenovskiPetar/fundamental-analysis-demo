@@ -1,0 +1,9 @@
+Defaulting to user installation because normal site-packages is not writeable
+Collecting plotly
+  Downloading plotly-6.0.0-py3-none-any.whl.metadata (5.6 kB)
+Requirement already satisfied: narwhals>=1.15.1 in /home/vscode/.local/lib/python3.11/site-packages (from plotly) (1.26.0)
+Requirement already satisfied: packaging in /home/vscode/.local/lib/python3.11/site-packages (from plotly) (24.2)
+Downloading plotly-6.0.0-py3-none-any.whl (14.8 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 14.8/14.8 MB 38.7 MB/s eta 0:00:00
+Installing collected packages: plotly
+Successfully installed plotly-6.0.0

@@ -26,10 +26,9 @@ def get_color_style(value):
         return 'color: red'
     return 'color: white'
 
-def get_income_statement(ticker):
+def get_income_statement(stock):
     """Get and format income statement data."""
-    stock = yf.Ticker(ticker)
-    print(stock.income_stmt)
+    # stock = yf.Ticker(ticker)
     income_stmt = stock.income_stmt
 
     if income_stmt.empty:
@@ -46,9 +45,9 @@ def get_income_statement(ticker):
     return income_stmt, formatted_income_stmt
 
 
-def get_balance_sheet(ticker):
+def get_balance_sheet(stock):
     """Get and format balance sheet data."""
-    stock = yf.Ticker(ticker)
+    # stock = yf.Ticker(ticker)
     bs = stock.balance_sheet
     
     if bs.empty:
@@ -64,9 +63,9 @@ def get_balance_sheet(ticker):
     # Store original values for coloring
     return bs, formatted_bs
 
-def get_cash_flow(ticker):
+def get_cash_flow(stock):
     """Get and format cash flow statement."""
-    stock = yf.Ticker(ticker)
+    # stock = yf.Ticker(ticker)
     cf = stock.cashflow
     
     if cf.empty:
@@ -77,13 +76,13 @@ def get_cash_flow(ticker):
     cf = cf.sort_index()
     
     # Format values
-    formatted_cf = cf.applymap(format_currency)
+    formatted_cf = cf.map(format_currency)
     
     return cf, formatted_cf
 
-def get_financial_ratios(ticker):
+def get_financial_ratios(stock):
     """Calculate and format key financial ratios."""
-    stock = yf.Ticker(ticker)
+    # stock = yf.Ticker(ticker)
     info = stock.info
     
     ratios = {
@@ -115,9 +114,8 @@ def get_financial_ratios(ticker):
     
     return ratios_df
 
-def display_financial_statements(ticker):
+def display_financial_statements(stock):
     """Display all financial statements in a tabbed interface."""
-    st.subheader("Financial Statements Analysis")
     
     # Create tabs
     tab1, tab2, tab3, tab4 = st.tabs(["Income Statement","Balance Sheet", "Cash Flow", "Financial Ratios"])
@@ -125,7 +123,7 @@ def display_financial_statements(ticker):
     with tab1:
         st.write("### Income Statement")
         try:
-            income_stmt, formatted_income_stmt = get_income_statement(ticker)
+            income_stmt, formatted_income_stmt = get_income_statement(stock)
             if not income_stmt.empty:
                 # Apply color styling
                 st.dataframe(
@@ -176,7 +174,7 @@ def display_financial_statements(ticker):
                 st.dataframe(
                     ratios_df.style.apply(lambda x: ['color: green' if v > 0 else 'color: red' if v < 0 else 'color: black' for v in x], 
                     subset=['Value']),
-                    use_container_width=True
+                    use_container_width=True, hide_index=True
                 )
             else:
                 st.warning("No ratio data available")
