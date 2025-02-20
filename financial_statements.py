@@ -138,7 +138,7 @@ def display_financial_statements(stock):
     with tab2:
         st.write("### Balance Sheet")
         try:
-            bs, formatted_bs = get_balance_sheet(ticker)
+            bs, formatted_bs = get_balance_sheet(stock)
             if not bs.empty:
                 # Apply color styling
                 st.dataframe(
@@ -153,7 +153,7 @@ def display_financial_statements(stock):
     with tab3:
         st.write("### Cash Flow Statement")
         try:
-            cf, formatted_cf = get_cash_flow(ticker)
+            cf, formatted_cf = get_cash_flow(stock)
             if not cf.empty:
                 # Apply color styling
                 st.dataframe(
@@ -168,7 +168,7 @@ def display_financial_statements(stock):
     with tab4:
         st.write("### Financial Ratios")
         try:
-            ratios_df = get_financial_ratios(ticker)
+            ratios_df = get_financial_ratios(stock)
             if not ratios_df.empty:
                 # Format and display ratios
                 st.dataframe(
