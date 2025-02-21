@@ -2,9 +2,10 @@ import altair as alt
 import pandas as pd
 import streamlit as st
 import yfinance as yf
+import plotly.graph_objects as go
 from stock_analysis import get_stock_info, compare_stocks
 from valuation import calculate_dtf_valuation, get_valuation_points
-from financial_statements import display_financial_statements
+from financial_statements import display_financial_statements, get_color_style
 from visualization import create_metrics_pie_chart
 from dtf import calculate_advanced_dcf, calculate_wacc, get_risk_free_rate, get_industry_beta
 
@@ -84,8 +85,14 @@ if st.session_state.set_ticker:
         if fair_price:
             st.write(f"Current Price: ${stock.info['currentPrice']:.2f}")
             # st.write(f"Potential Upside/Downside: {((fair_price/stock.info['currentPrice'])-1)*100:.2f}%")
-            st.metric("Estimated Fair Value (DTF)", f"${fair_price:.2f}", f"${((fair_price/stock.info['currentPrice'])-1)*100:.2f}% from current price")
+            st.metric("Estimated Fair Value (DTF)", f"${fair_price:.2f}", f"{((fair_price/stock.info['currentPrice'])-1)*100:.2f}%")
            
+            fig_dcf = go.Figure()
+            fig_dcf.add_trace(go.Scatter(x=list(range(1, 11)), y=projected_fcfs, 
+                                       mode='lines+markers', name='Projected FCF'))
+            fig_dcf.update_layout(title="Projected Free Cash Flows (10 Years)", 
+                                xaxis_title="Year", yaxis_title="FCF ($)")
+            st.plotly_chart(fig_dcf)
         # try:
         #     dtf_value = calculate_dtf_valuation(stock)
         #     current_price = info['currentPrice']
