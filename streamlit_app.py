@@ -15,6 +15,7 @@ st.title("&star; Fundamental analysis Platform")
 st.write(
     """
     Test demo app for fundamental analysis. WIP (Work in progress) \n
+    The data are read from ***finance.yahoo.com*** \n
     Used for educational purposes only
     """
 )
