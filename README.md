@@ -1,8 +1,8 @@
-# 🎬 Movies dataset template
+# 🎬 Stock fundamental analysis
 
-A simple Streamlit app showing movie data from [The Movie Database (TMDB)](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata). 
+A simple Streamlit app showing fundamental analysis for Stocks)](h[https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata](https://finance.yahoo.com/)). 
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://movies-dataset-template.streamlit.app/)
+[![Streamlit App](https://fundamental-analysis-petar.streamlit.app/)
 
 ### How to run it on your own machine
 
