@@ -2,7 +2,7 @@
 
 A simple Streamlit app showing fundamental analysis for Stocks)]([https://finance.yahoo.com/](https://finance.yahoo.com/)). 
 
-[![Streamlit App](https://fundamental-analysis-petar.streamlit.app/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://fundamental-analysis-petar.streamlit.app/)
 
 ### How to run it on your own machine
 
