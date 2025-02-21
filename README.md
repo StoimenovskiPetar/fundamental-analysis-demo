@@ -1,6 +1,6 @@
 # 🎬 Stock fundamental analysis
 
-A simple Streamlit app showing fundamental analysis for Stocks)](h[https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata](https://finance.yahoo.com/)). 
+A simple Streamlit app showing fundamental analysis for Stocks)]([https://finance.yahoo.com/](https://finance.yahoo.com/)). 
 
 [![Streamlit App](https://fundamental-analysis-petar.streamlit.app/)
 
